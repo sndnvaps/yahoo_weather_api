@@ -1,5 +1,9 @@
 # Yahoo Query Language (YQL)
 
+[![GoDoc](https://godoc.org/github.com/sndnvaps/yahoo_weather_api?status.svg)](https://godoc.org/github.com/sndnvaps/yahoo_weather_api)
+
+
+#how to get it 
 	go get github.com/sndnvaps/yahoo_weather_api
 
 ```

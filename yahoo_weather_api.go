@@ -1,4 +1,3 @@
-// use Yahoo Query Language (YQL)
 package yahoo
 
 import (
@@ -12,12 +11,6 @@ import (
 	"strconv"
 )
 
-/*
-select woeid from geo.places where text="jiangmen,guangdong,china"
-
-
-select * from weather.forecast where woeid in  (select woeid from geo.places where text="jiangmen,guangdong,china")
-*/
 
 const (
 	publicAPIURL string = "http://query.yahooapis.com/v1/public/yql"
