@@ -81,7 +81,9 @@ func GetForecastlData(location string) []ForecastInfo {
 	jsr := RunQuery(query)
 	json.Unmarshal([]byte(jsr), &v)
 	forecasts := dproxy.New(v).M("query").M("results").M("channel").M("item").M("forecast") //.A(0).M("day").String()
-	for i := 0; i < 10; i++ {
+
+	fca, _ := forecasts.Array()
+	for i := 0; i < len(fca); i++ {
 		//f := forecasts.A(i)
 		Forecasts = append(Forecasts, newForecastDataFromRow(forecasts.A(i)))
 	}
