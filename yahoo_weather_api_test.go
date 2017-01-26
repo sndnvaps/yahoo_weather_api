@@ -1,9 +1,9 @@
 package yahoo
 
 import (
+	"fmt"
 	"testing"
 	"unsafe"
-	//"fmt"
 )
 
 func TestYahooApiGetForecastData(t *testing.T) {
@@ -33,6 +33,7 @@ func TestYahooApi_(t *testing.T) {
 	astronomy := GetAstronomy(c)
 	conditions := GetConditions(c)
 	atmosphere := GetAtmosphere(c)
+	icon := GetWeatherIcon(c)
 	if unsafe.Sizeof(wind) == 0 {
 		t.Fatalf("The wind representing is nil.\n")
 	}
@@ -52,11 +53,15 @@ func TestYahooApi_(t *testing.T) {
 	if unsafe.Sizeof(atmosphere) == 0 {
 		t.Fatal("The Atmosphere representing is nil. \n")
 	}
-	/*
-		fmt.Println(atmosphere)
-		fmt.Println(conditions)
-		fmt.Println(astronomy)
-		fmt.Println(units)
-		fmt.Println(wind)
-	*/
+
+	if unsafe.Sizeof(icon) == 0 {
+		t.Fatal("Cannot get the url of icon, it was nil.\n")
+	}
+
+	fmt.Println(atmosphere)
+	fmt.Println(conditions)
+	fmt.Println(astronomy)
+	fmt.Println(units)
+	fmt.Println(wind)
+	fmt.Println(icon)
 }

@@ -63,7 +63,7 @@ type Units struct {
 }
 
 type Image struct {
-	url string
+	Url string
 }
 
 type Conditions struct {
@@ -128,7 +128,8 @@ func GetForecastlData(location string) ([]ForecastInfo, string) {
 		Forecasts = append(Forecasts, newForecastDataFromRow(forecasts.A(i)))
 	}
 	icon_url := GetWeatherIcon(ChannelNode)
-	return Forecasts, icon_url
+
+	return Forecasts, icon_url.Url
 
 }
 
@@ -171,9 +172,10 @@ func GetChannelNode(location string) dproxy.Proxy {
 
 //get the icon of weather yahoo
 // i := GetChannelNode(location)
-func GetWeatherIcon(i dproxy.Proxy) string {
-	icon, _ := i.M("image").M("url").String()
-	return icon
+func GetWeatherIcon(i dproxy.Proxy) Image {
+	Icon := Image{}
+	Icon.Url, _ = i.M("image").M("url").String()
+	return Icon
 }
 
 //get the wind info
