@@ -3,6 +3,7 @@ package yahoo
 import (
 	"testing"
 	"unsafe"
+	//"fmt"
 )
 
 func TestYahooApiGetForecastData(t *testing.T) {
@@ -31,6 +32,7 @@ func TestYahooApi_(t *testing.T) {
 	units := GetUnits(c)
 	astronomy := GetAstronomy(c)
 	conditions := GetConditions(c)
+	atmosphere := GetAtmosphere(c)
 	if unsafe.Sizeof(wind) == 0 {
 		t.Fatalf("The wind representing is nil.\n")
 	}
@@ -47,4 +49,14 @@ func TestYahooApi_(t *testing.T) {
 		t.Fatalf("The conditions representing is nil.\n")
 	}
 
+	if unsafe.Sizeof(atmosphere) == 0 {
+		t.Fatal("The Atmosphere representing is nil. \n")
+	}
+	/*
+		fmt.Println(atmosphere)
+		fmt.Println(conditions)
+		fmt.Println(astronomy)
+		fmt.Println(units)
+		fmt.Println(wind)
+	*/
 }

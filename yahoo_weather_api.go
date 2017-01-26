@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"time"
+	//"time"
 )
 
 const (
@@ -70,7 +70,7 @@ type Conditions struct {
 	Title   string
 	Lat     float64
 	Long    float64
-	PubDate time.Time
+	PubDate string
 	Temp    float64
 	Text    string
 }
@@ -237,8 +237,7 @@ func GetConditions(c dproxy.Proxy) Conditions {
 	long, _ := c_item.M("long").String()
 	con.Long, _ = strconv.ParseFloat(long, 64)
 
-	pubDate, _ := c_item.M("pubDate").String()
-	con.PubDate, _ = time.Parse("2006-01-02 15:04:05", pubDate)
+	con.PubDate, _ = c_item.M("pubDate").String()
 
 	temp, _ := c_con.M("temp").String()
 	con.Temp, _ = strconv.ParseFloat(temp, 64)
@@ -246,4 +245,25 @@ func GetConditions(c dproxy.Proxy) Conditions {
 	con.Text, _ = c_con.M("text").String()
 
 	return con
+}
+
+//get the  Atmosphere info
+//a := GetChannelNode(location)
+func GetAtmosphere(a dproxy.Proxy) Atmosphere {
+	atmosphere := Atmosphere{}
+	ai := a.M("atmosphere")
+
+	humidity, _ := ai.M("humidity").String()
+	atmosphere.Humidity, _ = strconv.ParseFloat(humidity, 64)
+
+	pressure, _ := ai.M("pressure").String()
+	atmosphere.Pressure, _ = strconv.ParseFloat(pressure, 64)
+
+	rising, _ := ai.M("rising").String()
+	atmosphere.Rising, _ = strconv.ParseFloat(rising, 64)
+
+	visibility, _ := ai.M("visibility").String()
+	atmosphere.Visibility, _ = strconv.ParseFloat(visibility, 64)
+
+	return atmosphere
 }
