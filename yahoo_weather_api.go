@@ -38,17 +38,41 @@ type Atmosphere struct {
 	Visibility float64
 }
 
+/*
+   "astronomy": {
+     "sunrise": "7:4 am",
+     "sunset": "4:55 pm"
+    }
+*/
+type Astronomy struct {
+	Sunrise string
+	Sunset  string
+}
+
+/*
+   "distance": "mi",
+   "pressure": "in",
+   "speed": "mph",
+   "temperature": "F"
+*/
+type Units struct {
+	Distance    string
+	Pressure    string
+	Speed       string
+	Temperature string
+}
+
 type Image struct {
 	url string
 }
 
 type Conditions struct {
-	Title string
-	Lat   float64
-	Long  float64
-	Date  time.Time
-	temp  float64
-	Text  string
+	Title   string
+	Lat     float64
+	Long    float64
+	PubDate time.Time
+	Temp    float64
+	Text    string
 }
 
 // runQuery runs the query and retuns the
@@ -125,11 +149,11 @@ func newForecastDataFromRow(row dproxy.Proxy) ForecastInfo {
 
 	high, _ := row.M("high").String()
 	High, _ := strconv.ParseFloat(high, 64)
-	f.High = Fahrenheit2Celsius(High)//High 
+	f.High = Fahrenheit2Celsius(High) //High
 
 	low, _ := row.M("low").String()
 	Low, _ := strconv.ParseFloat(low, 64)
-	f.Low =  Fahrenheit2Celsius(Low)//Low
+	f.Low = Fahrenheit2Celsius(Low) //Low
 
 	f.Text, _ = row.M("text").String()
 
@@ -170,7 +194,56 @@ func GetWindInfo(w dproxy.Proxy) WindInfo {
 	return wind
 }
 
-//℃
+//F -> ℃
 func Fahrenheit2Celsius(f float64) float64 {
 	return ((f - 32) / 1.8)
+}
+
+//get the units info
+//u := GetChannelNode(location)
+func GetUnits(u dproxy.Proxy) Units {
+	units := Units{}
+	ui := u.M("units")
+	units.Distance, _ = ui.M("distance").String()
+	units.Pressure, _ = ui.M("pressure").String()
+	units.Speed, _ = ui.M("speed").String()
+	units.Temperature, _ = ui.M("temperature").String()
+
+	return units
+}
+
+//get the astronomy info
+//a := GetChannelNode(location)
+func GetAstronomy(a dproxy.Proxy) Astronomy {
+	astronomy := Astronomy{}
+	ai := a.M("astronomy")
+	astronomy.Sunrise, _ = ai.M("sunrise").String()
+	astronomy.Sunset, _ = ai.M("sunset").String()
+
+	return astronomy
+}
+
+//get the Conditions info
+//c := GetChannelNode(location)
+func GetConditions(c dproxy.Proxy) Conditions {
+	con := Conditions{}
+	c_item := c.M("item")
+	c_con := c_item.M("condition")
+	con.Title, _ = c_item.M("title").String()
+
+	lat, _ := c_item.M("lat").String()
+	con.Lat, _ = strconv.ParseFloat(lat, 64)
+
+	long, _ := c_item.M("long").String()
+	con.Long, _ = strconv.ParseFloat(long, 64)
+
+	pubDate, _ := c_item.M("pubDate").String()
+	con.PubDate, _ = time.Parse("2006-01-02 15:04:05", pubDate)
+
+	temp, _ := c_con.M("temp").String()
+	con.Temp, _ = strconv.ParseFloat(temp, 64)
+
+	con.Text, _ = c_con.M("text").String()
+
+	return con
 }

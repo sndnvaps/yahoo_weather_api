@@ -29,8 +29,8 @@ import (
 
 func main() {
 
-	f := yahoo.GetForecastlData("jiangmen,guangdong,china")
-	fmt.Println(f)
+	f, icon_url := yahoo.GetForecastlData("jiangmen,guangdong,china")
+	fmt.Println(f,icon_url)
 }
 ```
 
