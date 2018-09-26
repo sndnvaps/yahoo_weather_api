@@ -16,6 +16,10 @@ const (
 	publicAPIURL string = "http://query.yahooapis.com/v1/public/yql"
 )
 
+func getPublicAPIURL() string{
+	return publicAPIURL
+}
+
 type ForecastInfo struct {
 	Code float64
 	Date string //time.Time
@@ -98,8 +102,7 @@ func BuildURL(query string) string {
 	params.Add("format", "json")
 	//	params.Add("diagnostics", "true")
 	params.Add("callback", "")
-
-	return publicAPIURL + "?" + params.Encode()
+	return getPublicAPIURL() + "?" + params.Encode()
 }
 
 // getJSON returns the JSON response
@@ -108,7 +111,8 @@ func getJSON(url string) []byte {
 	resp, errReq := http.Get(url)
 
 	if errReq != nil {
-		log.Fatalf("%s", errReq.Error())
+		log.Panicf("%s", errReq.Error())
+		return []byte("")
 	}
 
 	defer resp.Body.Close()
