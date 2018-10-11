@@ -1,6 +1,7 @@
 package yahoo
 
 import (
+	"bou.ke/monkey"
 	"fmt"
 	"testing"
 	"unsafe"
@@ -23,6 +24,27 @@ func TestYahooApiGetForecastData(t *testing.T) {
 			t.Fatalf("The forecast representing  is nil.\n")
 		}
 	}
+}
+
+func TestYahooApiGetWrongForecastData(t *testing.T) {
+	monkey.Patch(getPublicAPIURL, func() string {
+		return "http://wrong_url"
+	})
+
+	defer func(){
+		if r := recover(); r != nil {
+			monkey.UnpatchAll()
+			f, _ := GetForecastlData("jiangmen,guangdong,china")
+
+			if f == nil {
+				t.Fatal("forecast is nil\n")
+			}
+
+		}
+	}()
+
+	GetForecastlData("jiangmen,guangdong,china")
+	t.Fatal("No panic")
 }
 
 func TestYahooApi_(t *testing.T) {
